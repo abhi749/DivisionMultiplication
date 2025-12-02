@@ -35,7 +35,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 16px;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
       margin-bottom: 20px;
     }
@@ -60,37 +60,7 @@
       border-radius: 999px;
       font-size: 0.8rem;
       font-weight: 600;
-    }
-
-    .mascot-card {
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #eff6ff;
-      border-radius: 14px;
-      padding: 8px 10px;
-      border: 1px dashed #bfdbfe;
-    }
-
-    .mascot-emoji {
-      font-size: 1.8rem;
-    }
-
-    .mascot-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .mascot-title {
-      font-weight: 700;
-      font-size: 0.95rem;
-    }
-
-    .mascot-subtitle {
-      font-size: 0.85rem;
-      color: #4b5563;
+      white-space: nowrap;
     }
 
     .tabs {
@@ -120,6 +90,27 @@
     .tab.disabled {
       opacity: 0.5;
       cursor: default;
+    }
+
+    .language-row {
+      margin-top: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      font-size: 0.85rem;
+    }
+
+    .language-select {
+      border-radius: 999px;
+      border: 1px solid #c7d2fe;
+      padding: 4px 10px;
+      font-size: 0.85rem;
+      background: #ffffff;
+      cursor: pointer;
     }
 
     .card {
@@ -181,8 +172,9 @@
 
     .btn-row {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       margin-top: 4px;
     }
 
@@ -207,6 +199,23 @@
     button.calculate-btn:active {
       transform: translateY(0);
       box-shadow: 0 3px 8px rgba(37, 99, 235, 0.4);
+    }
+
+    .mic-btn {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-radius: 999px;
+      border: 1px solid #bfdbfe;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .mic-btn:hover {
+      background: #dbeafe;
     }
 
     .hint-text {
@@ -280,6 +289,37 @@
       font-size: 0.85rem;
     }
 
+    .mascot-card {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #eff6ff;
+      border-radius: 14px;
+      padding: 8px 10px;
+      border: 1px dashed #bfdbfe;
+    }
+
+    .mascot-emoji {
+      font-size: 1.8rem;
+    }
+
+    .mascot-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .mascot-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .mascot-subtitle {
+      font-size: 0.85rem;
+      color: #4b5563;
+    }
+
     @media (max-width: 600px) {
       .app {
         padding: 18px 14px 20px;
@@ -288,6 +328,10 @@
       .title-block h1 {
         font-size: 1.4rem;
       }
+
+      .badge {
+        margin-top: 8px;
+      }
     }
   </style>
 </head>
@@ -295,36 +339,53 @@
   <div class="app">
     <header class="app-header">
       <div class="title-block">
-        <h1>🧮 Division Explorer</h1>
-        <p>A friendly little lab to try out division and see all the factor pairs of your number.</p>
+        <h1 id="titleText">🧮 Division Explorer</h1>
+        <p id="subtitleText">
+          A friendly little lab to try out division and see all the factor pairs of your number.
+        </p>
         <div class="tabs">
-          <button class="tab active" type="button">Division</button>
-          <button class="tab disabled" type="button" title="Coming soon!">Times Tables (soon)</button>
+          <button class="tab active" type="button" id="divisionTab">Division</button>
+          <button class="tab disabled" type="button" id="timesTab" title="Coming soon!">
+            Times Tables (soon)
+          </button>
+        </div>
+        <div class="language-row">
+          <label for="languageSelect" id="languageLabel">Language / भाषा:</label>
+          <select id="languageSelect" class="language-select">
+            <option value="en">English</option>
+            <option value="hi">हिन्दी</option>
+          </select>
         </div>
       </div>
-      <div class="badge">
-        Built for kids 7–9 👧🧑🧠
-      </div>
-      <div class="card mascot-card">
-        <div class="mascot-emoji">🤖</div>
-        <div class="mascot-text">
-          <div class="mascot-title">Hi, I'm Digi!</div>
-          <div class="mascot-subtitle">Your little math buddy to explore numbers, division, and factor pairs. ✨</div>
+      <div>
+        <div class="badge">
+          <span id="badgeText">Built for kids 7–9 👧🧑🧠</span>
+        </div>
+        <div class="card mascot-card">
+          <div class="mascot-emoji">🤖</div>
+          <div class="mascot-text">
+            <div class="mascot-title" id="mascotTitle">Hi, I'm Digi!</div>
+            <div class="mascot-subtitle" id="mascotSubtitle">
+              Your little math buddy to explore numbers, division, and factor pairs. ✨
+            </div>
+          </div>
         </div>
       </div>
     </header>
 
     <section class="card">
-      <h2>Step 1: Enter your division problem ✏️</h2>
-      <p class="subtitle">Choose a number to share and how many equal groups you want.</p>
+      <h2 id="step1Title">Step 1: Enter your division problem ✏️</h2>
+      <p class="subtitle" id="step1Subtitle">
+        Choose a number to share and how many equal groups you want.
+      </p>
 
       <div class="input-row">
         <div class="field">
-          <label for="dividend">Number to share (dividend)</label>
+          <label for="dividend" id="dividendLabel">Number to share (dividend)</label>
           <input type="number" id="dividend" placeholder="e.g. 100" min="1">
         </div>
         <div class="field">
-          <label for="divisor">Number of groups (divisor)</label>
+          <label for="divisor" id="divisorLabel">Number of groups (divisor)</label>
           <input type="number" id="divisor" placeholder="e.g. 4" min="1">
         </div>
       </div>
@@ -333,18 +394,23 @@
         <button class="calculate-btn" id="calculateBtn" type="button">
           Show me!
         </button>
-        <span class="hint-text">Try a big number like 250 or 275 too.</span>
+        <button class="mic-btn" id="micBtn" type="button">
+          🎤 <span id="micBtnText">Speak</span>
+        </button>
+        <span class="hint-text" id="hintText">Try a big number like 250 or 275 too.</span>
       </div>
       <div id="error" class="error" style="display:none;"></div>
     </section>
 
     <section class="card">
-      <h2>Step 2: See the answer & story 💡</h2>
-      <p class="subtitle">We’ll show you the answer, the matching times-table fact, and all the factor pairs.</p>
+      <h2 id="step2Title">Step 2: See the answer & story 💡</h2>
+      <p class="subtitle" id="step2Subtitle">
+        We’ll show you the answer, the matching times-table fact, and all the factor pairs.
+      </p>
 
       <div id="result" class="result-section" style="display:none;">
         <div class="result-main">
-          <span>Result:</span>
+          <span id="resultLabel">Result:</span>
           <span class="equation" id="equationText"></span>
         </div>
         <div class="result-sentence" id="storyText"></div>
@@ -352,8 +418,8 @@
       </div>
 
       <div id="factors" class="factor-section" style="display:none; margin-top:10px;">
-        <h3>All factor pairs of your number 🔍</h3>
-        <p style="margin-bottom:4px; font-size:0.85rem; color:#6b7280;">
+        <h3 id="factorsTitle">All factor pairs of your number 🔍</h3>
+        <p id="factorsSubtitle" style="margin-bottom:4px; font-size:0.85rem; color:#6b7280;">
           These are all the ways to multiply two whole numbers to reach your starting number.
         </p>
         <div id="factorList" class="factor-list"></div>
@@ -362,6 +428,109 @@
   </div>
 
   <script>
+    // ---------- Translations ----------
+    let currentLanguage = 'en';
+
+    const translations = {
+      en: {
+        htmlLang: 'en',
+        title: '🧮 Division Explorer',
+        subtitle: 'A friendly little lab to try out division and see all the factor pairs of your number.',
+        divisionTab: 'Division',
+        timesTab: 'Times Tables (soon)',
+        languageLabel: 'Language / भाषा:',
+        badge: 'Built for kids 7–9 👧🧑🧠',
+        mascotTitle: "Hi, I'm Digi!",
+        mascotSubtitle: 'Your little math buddy to explore numbers, division, and factor pairs. ✨',
+        step1Title: 'Step 1: Enter your division problem ✏️',
+        step1Subtitle: 'Choose a number to share and how many equal groups you want.',
+        dividendLabel: 'Number to share (dividend)',
+        divisorLabel: 'Number of groups (divisor)',
+        dividendPlaceholder: 'e.g. 100',
+        divisorPlaceholder: 'e.g. 4',
+        calculateBtn: 'Show me!',
+        micButton: 'Speak',
+        hintText: 'Try a big number like 250 or 275 too.',
+        step2Title: 'Step 2: See the answer & story 💡',
+        step2Subtitle: 'We’ll show you the answer, the matching times-table fact, and all the factor pairs.',
+        resultLabel: 'Result:',
+        factorsTitle: 'All factor pairs of your number 🔍',
+        factorsSubtitle: 'These are all the ways to multiply two whole numbers to reach your starting number.',
+        listeningMessage: 'Listening... please say something like "100 divided by 4".',
+        speechError: 'Sorry, I could not hear properly. Please try again.',
+        speechDidntUnderstand: (heard) =>
+          `I heard: "${heard}". Please try saying two numbers, like "100 divided by 4".`
+      },
+      hi: {
+        htmlLang: 'hi',
+        title: '🧮 भाग खोजी',
+        subtitle: 'यह एक छोटा-सा लैब है जहाँ आप भाग का अभ्यास कर सकते हैं और अपने नंबर के सभी गुणनखंड देख सकते हैं।',
+        divisionTab: 'भाग (Division)',
+        timesTab: 'टेबल (जल्द ही)',
+        languageLabel: 'भाषा / Language:',
+        badge: '7–9 साल के बच्चों के लिए 👧🧑🧠',
+        mascotTitle: 'हाय, मैं डिगी हूँ!',
+        mascotSubtitle: 'आपका छोटा मैथ दोस्त, जो नंबर और भाग में मदद करेगा। ✨',
+        step1Title: 'कदम 1: अपना भाग सवाल लिखें ✏️',
+        step1Subtitle: 'एक संख्या चुनें और बताइए कि उसे कितने बराबर भागों में बाँटना है।',
+        dividendLabel: 'कुल संख्या (जिसे बाँटना है)',
+        divisorLabel: 'समूहों की संख्या',
+        dividendPlaceholder: 'जैसे 100',
+        divisorPlaceholder: 'जैसे 4',
+        calculateBtn: 'दिखाइए!',
+        micButton: 'बोलकर लिखें',
+        hintText: '250 या 275 जैसी बड़ी संख्या भी आज़माएँ।',
+        step2Title: 'कदम 2: जवाब और कहानी देखें 💡',
+        step2Subtitle: 'हम आपको जवाब, टेबल वाला तथ्य और सभी गुणनखंड दिखाएँगे।',
+        resultLabel: 'जवाब:',
+        factorsTitle: 'आपकी संख्या के सभी गुणनखंड 🔍',
+        factorsSubtitle: 'ये वे सभी तरीके हैं जिनसे दो संख्याएँ मिलकर आपकी संख्या बनाती हैं।',
+        listeningMessage: 'सुन रहे हैं... कुछ ऐसा बोलिए: "100 को 4 से भाग"।',
+        speechError: 'माफ़ कीजिए, साफ़ सुनाई नहीं दिया। दोबारा कोशिश करें।',
+        speechDidntUnderstand: (heard) =>
+          `मैंने सुना: "${heard}"। कृपया दो नंबर बोलिए, जैसे "100 को 4 से भाग"।`
+      }
+    };
+
+    function applyLanguage(lang) {
+      currentLanguage = translations[lang] ? lang : 'en';
+      const t = translations[currentLanguage];
+
+      document.documentElement.lang = t.htmlLang;
+
+      document.getElementById('titleText').textContent = t.title;
+      document.getElementById('subtitleText').textContent = t.subtitle;
+      document.getElementById('divisionTab').textContent = t.divisionTab;
+      document.getElementById('timesTab').textContent = t.timesTab;
+      document.getElementById('languageLabel').textContent = t.languageLabel;
+      document.getElementById('badgeText').textContent = t.badge;
+      document.getElementById('mascotTitle').textContent = t.mascotTitle;
+      document.getElementById('mascotSubtitle').textContent = t.mascotSubtitle;
+      document.getElementById('step1Title').textContent = t.step1Title;
+      document.getElementById('step1Subtitle').textContent = t.step1Subtitle;
+      document.getElementById('dividendLabel').textContent = t.dividendLabel;
+      document.getElementById('divisorLabel').textContent = t.divisorLabel;
+      document.getElementById('calculateBtn').textContent = t.calculateBtn;
+      document.getElementById('micBtnText').textContent = t.micButton;
+      document.getElementById('hintText').textContent = t.hintText;
+      document.getElementById('step2Title').textContent = t.step2Title;
+      document.getElementById('step2Subtitle').textContent = t.step2Subtitle;
+      document.getElementById('resultLabel').textContent = t.resultLabel;
+      document.getElementById('factorsTitle').textContent = t.factorsTitle;
+      document.getElementById('factorsSubtitle').textContent = t.factorsSubtitle;
+
+      const dividendInput = document.getElementById('dividend');
+      const divisorInput = document.getElementById('divisor');
+      dividendInput.placeholder = t.dividendPlaceholder;
+      divisorInput.placeholder = t.divisorPlaceholder;
+
+      // Update speech recognition language if available
+      if (recognition) {
+        recognition.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-IN';
+      }
+    }
+
+    // ---------- Main logic & speech recognition ----------
     const dividendInput = document.getElementById('dividend');
     const divisorInput = document.getElementById('divisor');
     const calculateBtn = document.getElementById('calculateBtn');
@@ -374,6 +543,19 @@
 
     const factorsBox = document.getElementById('factors');
     const factorList = document.getElementById('factorList');
+
+    const micBtn = document.getElementById('micBtn');
+    const languageSelect = document.getElementById('languageSelect');
+
+    let recognition = null;
+
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SR();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-IN';
+    }
 
     function clearOutputs() {
       errorBox.style.display = 'none';
@@ -406,26 +588,33 @@
       const quotient = Math.floor(dividend / divisor);
       const remainder = dividend % divisor;
 
-      // Show main equation
-      const eq = `${dividend} ÷ ${divisor} = ${quotient}` + (remainder ? ` (remainder ${remainder})` : '');
+      const eq =
+        dividend + ' ÷ ' + divisor + ' = ' + quotient +
+        (remainder ? ' (remainder ' + remainder + ')' : '');
       equationText.textContent = eq;
 
-      // Friendly story sentence
+      const t = translations[currentLanguage];
+
       const story = remainder === 0
-        ? `If you share ${dividend} into ${divisor} equal groups, each group gets ${quotient}.`
-        : `If you share ${dividend} into ${divisor} equal groups, each group gets ${quotient} and ${remainder} is left over.`;
+        ? (currentLanguage === 'hi'
+          ? `${dividend} को ${divisor} बराबर भागों में बाँटें तो हर भाग में ${quotient} आता है।`
+          : `If you share ${dividend} into ${divisor} equal groups, each group gets ${quotient}.`)
+        : (currentLanguage === 'hi'
+          ? `${dividend} को ${divisor} बराबर भागों में बाँटें तो हर भाग में ${quotient} आता है और ${remainder} बच जाता है।`
+          : `If you share ${dividend} into ${divisor} equal groups, each group gets ${quotient} and ${remainder} is left over.`);
       storyText.textContent = story;
 
-      // Times-table connection (only makes sense if no remainder)
       if (remainder === 0) {
-        timesText.textContent = `${divisor} × ${quotient} = ${dividend}`;
+        timesText.textContent = divisor + ' × ' + quotient + ' = ' + dividend;
       } else {
-        timesText.textContent = `Because there is a remainder, ${divisor} × ${quotient} is only ${divisor * quotient}, not ${dividend}.`;
+        timesText.textContent =
+          (currentLanguage === 'hi'
+            ? `क्योंकि बाकी बचता है, इसलिए ${divisor} × ${quotient} केवल ${divisor * quotient} होता है, ${dividend} नहीं।`
+            : `Because there is a remainder, ${divisor} × ${quotient} is only ${divisor * quotient}, not ${dividend}.`);
       }
 
       resultBox.style.display = 'block';
 
-      // Factor pairs for the starting number (dividend)
       const n = dividend;
       const pairs = [];
       for (let i = 1; i * i <= n; i++) {
@@ -442,18 +631,18 @@
 
         const mult = document.createElement('span');
         mult.className = 'equation-pill';
-        mult.textContent = `${a} × ${b} = ${n}`;
+        mult.textContent = a + ' × ' + b + ' = ' + n;
 
         const arrow = document.createElement('span');
         arrow.textContent = '→';
 
         const div1 = document.createElement('span');
         div1.className = 'equation-pill';
-        div1.textContent = `${n} ÷ ${a} = ${b}`;
+        div1.textContent = n + ' ÷ ' + a + ' = ' + b;
 
         const div2 = document.createElement('span');
         div2.className = 'equation-pill';
-        div2.textContent = `${n} ÷ ${b} = ${a}`;
+        div2.textContent = n + ' ÷ ' + b + ' = ' + a;
 
         item.appendChild(mult);
         item.appendChild(arrow);
@@ -465,15 +654,66 @@
       factorsBox.style.display = 'block';
     }
 
+    function handleSpeechResult(text) {
+      const t = translations[currentLanguage];
+      const lower = text.toLowerCase();
+      const nums = lower.match(/\d+/g);
+
+      if (nums && nums.length >= 2) {
+        dividendInput.value = parseInt(nums[0], 10);
+        divisorInput.value = parseInt(nums[1], 10);
+        calculate();
+      } else {
+        errorBox.style.display = 'block';
+        errorBox.textContent = t.speechDidntUnderstand(text);
+      }
+    }
+
+    if (micBtn) {
+      if (recognition) {
+        micBtn.addEventListener('click', () => {
+          clearOutputs();
+          const t = translations[currentLanguage];
+          errorBox.style.display = 'block';
+          errorBox.textContent = t.listeningMessage;
+          recognition.start();
+        });
+
+        recognition.onresult = (event) => {
+          const text = event.results[0][0].transcript;
+          handleSpeechResult(text);
+        };
+
+        recognition.onerror = () => {
+          const t = translations[currentLanguage];
+          errorBox.style.display = 'block';
+          errorBox.textContent = t.speechError;
+        };
+
+        // onend: do nothing special
+      } else {
+        // Browser does not support speech recognition
+        micBtn.style.display = 'none';
+      }
+    }
+
     calculateBtn.addEventListener('click', calculate);
 
-    // Let kids press Enter to calculate
     dividendInput.addEventListener('keypress', function (e) {
       if (e.key === 'Enter') calculate();
     });
     divisorInput.addEventListener('keypress', function (e) {
       if (e.key === 'Enter') calculate();
     });
+
+    if (languageSelect) {
+      languageSelect.addEventListener('change', function (e) {
+        applyLanguage(e.target.value);
+      });
+    }
+
+    // Initial language setup
+    applyLanguage('en');
   </script>
 </body>
 </html>
