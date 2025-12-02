@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Division Explorer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: #f4f7ff;
+      color: #1f2933;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 24px 12px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 900px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+      padding: 24px 20px 28px;
+    }
+
+    .app-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .title-block h1 {
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .title-block p {
+      margin-top: 4px;
+      color: #4b5563;
+      font-size: 0.95rem;
+    }
+
+    .badge {
+      background: #e0ecff;
+      color: #1d4ed8;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .mascot-card {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #eff6ff;
+      border-radius: 14px;
+      padding: 8px 10px;
+      border: 1px dashed #bfdbfe;
+    }
+
+    .mascot-emoji {
+      font-size: 1.8rem;
+    }
+
+    .mascot-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .mascot-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .mascot-subtitle {
+      font-size: 0.85rem;
+      color: #4b5563;
+    }
+
+    .tabs {
+      display: inline-flex;
+      border-radius: 999px;
+      background: #e5e7eb;
+      padding: 4px;
+      gap: 4px;
+      margin-top: 10px;
+    }
+
+    .tab {
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      font-weight: 500;
+    }
+
+    .tab.active {
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    .tab.disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    .card {
+      background: #f9fafb;
+      border-radius: 14px;
+      padding: 16px 16px 18px;
+      margin-bottom: 16px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card p.subtitle {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 12px;
+    }
+
+    .input-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .field {
+      flex: 1 1 140px;
+      min-width: 0;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+      color: #374151;
+      font-weight: 500;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .field input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.2);
+    }
+
+    .btn-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    button.calculate-btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+      box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
+    }
+
+    button.calculate-btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    button.calculate-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 3px 8px rgba(37, 99, 235, 0.4);
+    }
+
+    .hint-text {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .result-section {
+      margin-top: 10px;
+      border-radius: 12px;
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      padding: 10px 12px;
+      font-size: 0.95rem;
+    }
+
+    .result-main {
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .result-main span.equation {
+      font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    .result-sentence {
+      font-size: 0.9rem;
+      color: #374151;
+      margin-bottom: 4px;
+    }
+
+    .factor-section {
+      background: #f9fafb;
+      border-radius: 12px;
+      padding: 10px 12px;
+      border: 1px dashed #d1d5db;
+      font-size: 0.9rem;
+    }
+
+    .factor-section h3 {
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+
+    .factor-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    .factor-item {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .equation-pill {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #e5e7eb;
+    }
+
+    .error {
+      margin-top: 6px;
+      color: #b91c1c;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 600px) {
+      .app {
+        padding: 18px 14px 20px;
+      }
+
+      .title-block h1 {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="title-block">
+        <h1>🧮 Division Explorer</h1>
+        <p>A friendly little lab to try out division and see all the factor pairs of your number.</p>
+        <div class="tabs">
+          <button class="tab active" type="button">Division</button>
+          <button class="tab disabled" type="button" title="Coming soon!">Times Tables (soon)</button>
+        </div>
+      </div>
+      <div class="badge">
+        Built for kids 7–9 👧🧑🧠
+      </div>
+      <div class="card mascot-card">
+        <div class="mascot-emoji">🤖</div>
+        <div class="mascot-text">
+          <div class="mascot-title">Hi, I'm Digi!</div>
+          <div class="mascot-subtitle">Your little math buddy to explore numbers, division, and factor pairs. ✨</div>
+        </div>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2>Step 1: Enter your division problem ✏️</h2>
+      <p class="subtitle">Choose a number to share and how many equal groups you want.</p>
+
+      <div class="input-row">
+        <div class="field">
+          <label for="dividend">Number to share (dividend)</label>
+          <input type="number" id="dividend" placeholder="e.g. 100" min="1">
+        </div>
+        <div class="field">
+          <label for="divisor">Number of groups (divisor)</label>
+          <input type="number" id="divisor" placeholder="e.g. 4" min="1">
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="calculate-btn" id="calculateBtn" type="button">
+          Show me!
+        </button>
+        <span class="hint-text">Try a big number like 250 or 275 too.</span>
+      </div>
+      <div id="error" class="error" style="display:none;"></div>
+    </section>
+
+    <section class="card">
+      <h2>Step 2: See the answer & story 💡</h2>
+      <p class="subtitle">We’ll show you the answer, the matching times-table fact, and all the factor pairs.</p>
+
+      <div id="result" class="result-section" style="display:none;">
+        <div class="result-main">
+          <span>Result:</span>
+          <span class="equation" id="equationText"></span>
+        </div>
+        <div class="result-sentence" id="storyText"></div>
+        <div class="result-sentence" id="timesText"></div>
+      </div>
+
+      <div id="factors" class="factor-section" style="display:none; margin-top:10px;">
+        <h3>All factor pairs of your number 🔍</h3>
+        <p style="margin-bottom:4px; font-size:0.85rem; color:#6b7280;">
+          These are all the ways to multiply two whole numbers to reach your starting number.
+        </p>
+        <div id="factorList" class="factor-list"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const dividendInput = document.getElementById('dividend');
+    const divisorInput = document.getElementById('divisor');
+    const calculateBtn = document.getElementById('calculateBtn');
+    const errorBox = document.getElementById('error');
+
+    const resultBox = document.getElementById('result');
+    const equationText = document.getElementById('equationText');
+    const storyText = document.getElementById('storyText');
+    const timesText = document.getElementById('timesText');
+
+    const factorsBox = document.getElementById('factors');
+    const factorList = document.getElementById('factorList');
+
+    function clearOutputs() {
+      errorBox.style.display = 'none';
+      errorBox.textContent = '';
+      resultBox.style.display = 'none';
+      factorsBox.style.display = 'none';
+      equationText.textContent = '';
+      storyText.textContent = '';
+      timesText.textContent = '';
+      factorList.innerHTML = '';
+    }
+
+    function calculate() {
+      clearOutputs();
+
+      const dividend = parseInt(dividendInput.value, 10);
+      const divisor = parseInt(divisorInput.value, 10);
+
+      if (isNaN(dividend) || isNaN(divisor)) {
+        errorBox.style.display = 'block';
+        errorBox.textContent = 'Please enter both numbers.';
+        return;
+      }
+      if (dividend <= 0 || divisor <= 0) {
+        errorBox.style.display = 'block';
+        errorBox.textContent = 'Please use positive numbers greater than zero.';
+        return;
+      }
+
+      const quotient = Math.floor(dividend / divisor);
+      const remainder = dividend % divisor;
+
+      // Show main equation
+      const eq = `${dividend} ÷ ${divisor} = ${quotient}` + (remainder ? ` (remainder ${remainder})` : '');
+      equationText.textContent = eq;
+
+      // Friendly story sentence
+      const story = remainder === 0
+        ? `If you share ${dividend} into ${divisor} equal groups, each group gets ${quotient}.`
+        : `If you share ${dividend} into ${divisor} equal groups, each group gets ${quotient} and ${remainder} is left over.`;
+      storyText.textContent = story;
+
+      // Times-table connection (only makes sense if no remainder)
+      if (remainder === 0) {
+        timesText.textContent = `${divisor} × ${quotient} = ${dividend}`;
+      } else {
+        timesText.textContent = `Because there is a remainder, ${divisor} × ${quotient} is only ${divisor * quotient}, not ${dividend}.`;
+      }
+
+      resultBox.style.display = 'block';
+
+      // Factor pairs for the starting number (dividend)
+      const n = dividend;
+      const pairs = [];
+      for (let i = 1; i * i <= n; i++) {
+        if (n % i === 0) {
+          const j = n / i;
+          pairs.push([i, j]);
+        }
+      }
+
+      factorList.innerHTML = '';
+      pairs.forEach(([a, b]) => {
+        const item = document.createElement('div');
+        item.className = 'factor-item';
+
+        const mult = document.createElement('span');
+        mult.className = 'equation-pill';
+        mult.textContent = `${a} × ${b} = ${n}`;
+
+        const arrow = document.createElement('span');
+        arrow.textContent = '→';
+
+        const div1 = document.createElement('span');
+        div1.className = 'equation-pill';
+        div1.textContent = `${n} ÷ ${a} = ${b}`;
+
+        const div2 = document.createElement('span');
+        div2.className = 'equation-pill';
+        div2.textContent = `${n} ÷ ${b} = ${a}`;
+
+        item.appendChild(mult);
+        item.appendChild(arrow);
+        item.appendChild(div1);
+        item.appendChild(div2);
+        factorList.appendChild(item);
+      });
+
+      factorsBox.style.display = 'block';
+    }
+
+    calculateBtn.addEventListener('click', calculate);
+
+    // Let kids press Enter to calculate
+    dividendInput.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') calculate();
+    });
+    divisorInput.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') calculate();
+    });
+  </script>
+</body>
+</html>
