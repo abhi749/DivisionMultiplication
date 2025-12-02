@@ -593,16 +593,14 @@
           `Because there is a remainder, ${divisor} × ${quotient} is only ${divisor * quotient}, not ${dividend}.`,
         multiplyStory: (a, b, product) =>
           `${a} × ${b} = ${product}.`,
-        multiplyDetails: {
-          commutative: (a, b, product) => 
-            `📐 Commutative property: ${a} × ${b} = ${b} × ${a} = ${product}`,
-          repeated: (a, b) =>
-            `➕ Repeated addition: ${a} × ${b} means adding ${a} together ${b} times`,
-          skip: (a, b) =>
-            `🦘 Skip counting: Count by ${a}s, ${b} times`,
-          reverse: (product, a, b) =>
-            `↩️ Division check: ${product} ÷ ${a} = ${b} and ${product} ÷ ${b} = ${a}`
-        }
+        multiplyDetailsCommutative: (a, b, product) => 
+          `📐 Commutative property: ${a} × ${b} = ${b} × ${a} = ${product}`,
+        multiplyDetailsRepeated: (a, b) =>
+          `➕ Repeated addition: ${a} × ${b} means adding ${a} together ${b} times`,
+        multiplyDetailsSkip: (a, b) =>
+          `🦘 Skip counting: Count by ${a}s, ${b} times`,
+        multiplyDetailsReverse: (product, a, b) =>
+          `↩️ Division check: ${product} ÷ ${a} = ${b} and ${product} ÷ ${b} = ${a}`
       },
       hi: {
         appTitle: "🪄 मैथ मैजिक",
@@ -639,16 +637,14 @@
           `क्योंकि बाकी बचता है, इसलिए ${divisor} × ${quotient} = ${divisor * quotient} है, ${dividend} नहीं।`,
         multiplyStory: (a, b, product) =>
           `${a} × ${b} = ${product}।`,
-        multiplyDetails: {
-          commutative: (a, b, product) => 
-            `📐 क्रमविनिमेय गुण: ${a} × ${b} = ${b} × ${a} = ${product}`,
-          repeated: (a, b) =>
-            `➕ बार-बार जोड़ना: ${a} × ${b} का मतलब है ${a} को ${b} बार जोड़ना`,
-          skip: (a, b) =>
-            `🦘 छलांग गिनती: ${a} की छलांग से ${b} बार गिनो`,
-          reverse: (product, a, b) =>
-            `↩️ भाग से जाँच: ${product} ÷ ${a} = ${b} और ${product} ÷ ${b} = ${a}`
-        }
+        multiplyDetailsCommutative: (a, b, product) => 
+          `📐 क्रमविनिमेय गुण: ${a} × ${b} = ${b} × ${a} = ${product}`,
+        multiplyDetailsRepeated: (a, b) =>
+          `➕ बार-बार जोड़ना: ${a} × ${b} का मतलब है ${a} को ${b} बार जोड़ना`,
+        multiplyDetailsSkip: (a, b) =>
+          `🦘 छलांग गिनती: ${a} की छलांग से ${b} बार गिनो`,
+        multiplyDetailsReverse: (product, a, b) =>
+          `↩️ भाग से जाँच: ${product} ÷ ${a} = ${b} और ${product} ÷ ${b} = ${a}`
       }
     };
 
@@ -861,14 +857,14 @@
       // Commutative property
       const detail1 = document.createElement('div');
       detail1.className = 'detail-row';
-      detail1.innerHTML = `<span class="equation-pill">${t.multiplyDetails.commutative(a, b, product)}</span>`;
+      detail1.innerHTML = `<span class="equation-pill">${t.multiplyDetailsCommutative(a, b, product)}</span>`;
       multiplyDetailsList.appendChild(detail1);
 
       // Repeated addition
       const detail2 = document.createElement('div');
       detail2.className = 'detail-row';
       const additionSeq = Array(Math.min(b, 10)).fill(a).join(' + ') + (b > 10 ? ' + ...' : '');
-      detail2.innerHTML = `<span class="equation-pill">${t.multiplyDetails.repeated(a, b)}</span><br><span style="margin-left: 20px; font-size: 0.85rem;">${additionSeq} = ${product}</span>`;
+      detail2.innerHTML = `<span class="equation-pill">${t.multiplyDetailsRepeated(a, b)}</span><br><span style="margin-left: 20px; font-size: 0.85rem;">${additionSeq} = ${product}</span>`;
       multiplyDetailsList.appendChild(detail2);
 
       // Skip counting
@@ -876,7 +872,7 @@
         const detail3 = document.createElement('div');
         detail3.className = 'detail-row';
         const skipSeq = Array.from({length: b}, (_, i) => a * (i + 1)).join(', ');
-        detail3.innerHTML = `<span class="equation-pill">${t.multiplyDetails.skip(a, b)}</span><br><span style="margin-left: 20px; font-size: 0.85rem;">${skipSeq}</span>`;
+        detail3.innerHTML = `<span class="equation-pill">${t.multiplyDetailsSkip(a, b)}</span><br><span style="margin-left: 20px; font-size: 0.85rem;">${skipSeq}</span>`;
         multiplyDetailsList.appendChild(detail3);
       }
 
@@ -884,7 +880,7 @@
       if (product > 0) {
         const detail4 = document.createElement('div');
         detail4.className = 'detail-row';
-        detail4.innerHTML = `<span class="equation-pill">${t.multiplyDetails.reverse(product, a, b)}</span>`;
+        detail4.innerHTML = `<span class="equation-pill">${t.multiplyDetailsReverse(product, a, b)}</span>`;
         multiplyDetailsList.appendChild(detail4);
       }
 
