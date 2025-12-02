@@ -5,6 +5,22 @@
   <title>Math Magic</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    /* Loading indicator */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #f4f7ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      font-size: 1.2rem;
+      color: #2563eb;
+    }
+    
     * {
       box-sizing: border-box;
       margin: 0;
@@ -366,23 +382,74 @@
     }
 
     @media (max-width: 600px) {
+      body {
+        padding: 12px 8px;
+      }
+      
       .app {
         padding: 18px 14px 20px;
+        border-radius: 12px;
       }
 
       .title-block h1 {
         font-size: 1.4rem;
       }
+      
+      .title-block p {
+        font-size: 0.88rem;
+      }
 
       .top-controls {
         flex-direction: column;
         align-items: flex-start;
+        width: 100%;
+      }
+      
+      .tabs {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .lang-select {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      
+      .input-row {
+        flex-direction: column;
+      }
+      
+      .field {
+        width: 100%;
+      }
+      
+      .btn-row {
+        flex-wrap: wrap;
+      }
+      
+      button.calculate-btn,
+      button.clear-btn {
+        flex: 1 1 auto;
+        min-width: 120px;
+      }
+      
+      .mascot-card {
+        padding: 10px 12px;
+      }
+      
+      .badge {
+        font-size: 0.75rem;
+        padding: 5px 10px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="app">
+  <div class="loading-overlay" id="loadingOverlay">
+    <div>🐨 Loading Math Magic...</div>
+  </div>
+  
+  <div class="app" id="mainApp" style="display: none;">
     <header class="app-header">
       <div class="title-block">
         <h1 id="appTitle">🪄 Math Magic</h1>
@@ -521,7 +588,24 @@
   </div>
 
   <script>
+    // Add error handler for debugging
+    window.onerror = function(msg, url, lineNo, columnNo, error) {
+      console.error('Error: ' + msg + '\nLine: ' + lineNo + '\nColumn: ' + columnNo);
+      return false;
+    };
+
+    // Check if DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+
+    function initApp() {
+    try {
     // ---------- ELEMENT REFERENCES ----------
+    const mainApp = document.getElementById('mainApp');
+    const loadingOverlay = document.getElementById('loadingOverlay');
     const tabDivision = document.getElementById('tabDivision');
     const tabMultiply = document.getElementById('tabMultiply');
     const divisionSection = document.getElementById('divisionSection');
@@ -1013,6 +1097,19 @@
 
     divisionMicBtn.addEventListener('click', startDivisionSpeech);
     multiplyMicBtn.addEventListener('click', startMultiplySpeech);
+    
+    // Show app, hide loading
+    if (mainApp) mainApp.style.display = 'block';
+    if (loadingOverlay) loadingOverlay.style.display = 'none';
+    
+    } catch (error) {
+      console.error('Init error:', error);
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      if (loadingOverlay) {
+        loadingOverlay.innerHTML = '<div>⚠️ Error loading app. Please refresh.</div>';
+      }
+    }
+    } // End of initApp function
   </script>
 </body>
 </html>
